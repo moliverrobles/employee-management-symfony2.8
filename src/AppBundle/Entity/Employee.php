@@ -25,7 +25,7 @@ class Employee
 
     /**
      * 
-     * @ORM\OneToMany(targetEntity="AttendanceRecords", mappedBy="empId")
+     * @ORM\OneToMany(targetEntity="AttendanceRecords", mappedBy="empId", orphanRemoval=true)
      */
     private $attendanceId;
 
@@ -58,14 +58,14 @@ class Employee
     /**
      * @var string
      *
-     * @ORM\Column(name="gender", type="string", length=6)
+     * @ORM\Column(name="gender", type="string", length=255)
      */
     private $gender;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string", length=13)
+     * @ORM\Column(name="status", type="string", length=255)
      */
     private $status;
 
@@ -92,7 +92,7 @@ class Employee
      /**
      * @var \integer
      *
-     * @ORM\Column(name="contact_details", type="string", nullable=true, length=14)
+     * @ORM\Column(name="contact_details", type="string", nullable=true, length=255)
      */
     private $contactDetails;
      /**
@@ -110,7 +110,7 @@ class Employee
     /**
      * @var \integer
      *
-     * @ORM\Column(name="emergency_contact", type="string", nullable=true, length=14)
+     * @ORM\Column(name="emergency_contact", type="string", nullable=true, length=255)
      */
     private $emergencyContact;
 
