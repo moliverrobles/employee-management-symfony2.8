@@ -9,7 +9,11 @@
         </div> #}
         <div class="col-sm-3">
           {{ form_start(form) }}
-            {{ form_widget(form.timeIn,  {'id': 'selectDate','attr':{'class': 'select_date form-control select'}}) }}
+            {{ form_widget(form.timeIn,  {'id': 'selectDate','attr':{'class': 'select_date form-control select', 'value':date}}) }}
+        </div>
+        <div class="col-sm-3">
+            {{ form_widget(form.timeOut,  {'id': 'selectDateTo','attr':{'class': 'select_date form-control select', 'value':dateTo}}) }}
+
           {{ form_end(form) }}
         </div>
         {# <div class="col-sm-1">
@@ -285,11 +289,14 @@
   $('#search').click(function() {
 
     var id= $('#selectDate').val();
+    var id2= $('#selectDateTo').val();
+
+
       $.ajax({
         type: "GET",
-        url: "{{ path('attendance_records', { 'id': 'id' }) }}".replace('id', id),
+        url: "{{ path('attendance_records_search', { 'id': 'id','id2': 'id2'  }) }}".replace('id', id).replace('id2', id2),
         success: function(){
-          window.location.href = "{{ path('attendance_records', { 'id': 'id' }) }}".replace('id', id);
+          window.location.href = "{{ path('attendance_records_search', { 'id': 'id','id2': 'id2' }) }}".replace('id', id).replace('id2', id2);
         }
       });
   });
