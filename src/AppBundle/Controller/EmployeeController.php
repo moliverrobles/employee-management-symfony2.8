@@ -171,26 +171,15 @@ class EmployeeController extends Controller
         $attendanceRecord = new AttendanceRecords();
         $form = $this->createForm('AppBundle\Form\SearchAttendanceRecordsType', $attendanceRecord);
 
-        if($id == 'all'){
-            $em = $this->getDoctrine()->getManager();
-            $employeesRecords = $em->getRepository('AppBundle:AttendanceRecords')->findAllRecords();
-        }else{
-            $em = $this->getDoctrine()->getManager();
-            $employeesRecords = $em->getRepository('AppBundle:AttendanceRecords')->SearchByDate($id);
-            /*dump($employeesRecords);*/
-        }   
-        /*
-        }
-        $date = new \DateTime($id.' 08:00:00');
         $em = $this->getDoctrine()->getManager();
-        $employeesRecords = $em->getRepository('AppBundle:AttendanceRecords')->findBy(array('timeIn' => $date));*/
-
+        $employeesRecords = $em->getRepository('AppBundle:AttendanceRecords')->SearchByDate($id);
         return $this->render('employee/attendance-records.html.twig', array(
             'attendanceRecord' =>  $attendanceRecord,
             'form' => $form->createView(),
             'employeesRecords' => $employeesRecords,
             'date' => $id,
             'dateTo' => null,
+            'dateFrom' => null,
         ));
     }
 
@@ -212,6 +201,7 @@ class EmployeeController extends Controller
             'employeesRecords' => $employeesRecords,
             'date' => $id,
             'dateTo' => $id2,
+            'dateFrom' => $id,
         ));
     }
 
