@@ -190,6 +190,28 @@ class EmployeeController extends Controller
             'form' => $form->createView(),
             'employeesRecords' => $employeesRecords,
             'date' => $id,
+            'dateTo' => null,
+        ));
+    }
+
+    /**
+     * Lists all employee entities.
+     *
+     * @Route("/attendance-records-search/{id}/{id2}", name="attendance_records_search")
+     */
+    public function attendanceRecordSearchFromToAction($id, $id2)
+    {
+        $attendanceRecord = new AttendanceRecords();
+        $form = $this->createForm('AppBundle\Form\SearchAttendanceRecordsType', $attendanceRecord);
+
+        $em = $this->getDoctrine()->getManager();
+        $employeesRecords = $em->getRepository('AppBundle:AttendanceRecords')->SearchDateFromTo($id, $id2);
+        return $this->render('employee/attendance-records.html.twig', array(
+            'attendanceRecord' =>  $attendanceRecord,
+            'form' => $form->createView(),
+            'employeesRecords' => $employeesRecords,
+            'date' => $id,
+            'dateTo' => $id2,
         ));
     }
 
