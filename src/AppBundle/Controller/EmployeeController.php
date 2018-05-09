@@ -141,10 +141,10 @@ class EmployeeController extends Controller
      * @Route("/employee-delete/{id}/", name="employee_delete")
      * @Method("GET")
      */
-    public function deleteUserAction(Employee $employee)
+    public function deleteEmployeeAction(Employee $id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $em->remove($employee);
+        $em->remove($id);
         $em->flush();
     }
 
@@ -154,10 +154,10 @@ class EmployeeController extends Controller
      * @Route("/user-delete/{id}/", name="user_delete")
      * @Method("GET")
      */
-    public function deleteEmployeeAction(User $delUser)
+    public function deleteUserAction(User $id)
     {
         $em = $this->getDoctrine()->getEntityManager();
-        $em->remove($delUser);
+        $em->remove($id);
         $em->flush();
     }
 
