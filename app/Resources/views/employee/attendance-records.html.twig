@@ -9,7 +9,7 @@
         </div> #}
         <div class="col-sm-3">
           {{ form_start(form) }}
-            {{ form_widget(form.timeIn,  {'id': 'selectDate','attr':{'class': 'select_date form-control select', 'value':date}}) }}
+            {{ form_widget(form.timeIn,  {'id': 'selectDate','attr':{'class': 'select_date form-control select', 'value':dateFrom}}) }}
         </div>
         <div class="col-sm-1">
             <Center><h5>to</h5></Center>
@@ -25,11 +25,10 @@
         <div class="pull-left col-sm-5">
             <button class="btn btn-xs btn-info" id="search">SEARCH</button>
             <a class="btn btn-xs btn-info"href="{{ path('attendance_records', { 'id': 'now'|date("Y-m-d") }) }}">TODAY</a>
-            <a class="btn btn-xs btn-info"href="{{ path('attendance_records', { 'id': 'all' }) }}">SHOW ALL</a>
         </div>        
       </div>
       <div class=" col-sm-12">
-        {% if date != 'all'%}
+        {% if date != 'all' %}
         <div class="row dateNavigation">
           <div class="col-sm-4">
             {% set previous  = date|date_modify("-1 day")|date("Y-m-d") %}
@@ -187,14 +186,14 @@
           {% endfor %}
         {% endif %}
         {% if date == 'all' %}  
-          {% set start_date = null %}
-          {% set end_date = null %}
+          {% set start_date = dateFrom %}
+          {% set end_date = dateTo %}
           {% for employeesRecords in employeesRecords %}
             {% if loop.first %}
               {% set start_date = employeesRecords.timeIn|date('Y-m-d')%}
             {% endif %}
             {# {% set start_date = employeesRecords.timeIn|date('Y-m-d') %} #}
-            {% set end_date = "now"|date('Y-m-d') %}
+            {% set end_date = dateTo|date('Y-m-d') %}
           {% endfor %}
           {% for x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}{# 86400 seconds = 1 day #}
             {% if (x|date('N') == 6) or (x|date('N') == 7) %}
@@ -226,10 +225,13 @@
                       {{ employeesRecords.firstName }} {{ employeesRecords.lastName }}<br/>
                     </div>
                     <div class="timeInColumn col-sm-3">
-                      {{ employeesRecords.timeIn |date('M-d H:i:s ') }}
+                      {{ employeesRecords.timeIn|date('M-d H:i:s ') }}
                     </div>
                     <div class="timeOutColumn col-sm-3">
-                       {{ employeesRecords.timeOut |date('M-d H:i:s ') }}
+                      {% if employeesRecords.timeIn|date('Y-m-d')  != null %}
+                        {{ employeesRecords.timeOut|date('M-d H:i:s ') }}
+
+                      {% endif %}
                     </div>  
                   </div>
                 {% endif %}
