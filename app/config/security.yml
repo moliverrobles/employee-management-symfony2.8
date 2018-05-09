@@ -1,0 +1,82 @@
+# To get started with security, check out the documentation:
+# https://symfony.com/doc/current/security.html
+security:
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+
+    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers:
+       our_db_provider:
+            entity:
+                class: AppBundle:User
+                property: username
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+
+            anonymous: ~
+            provider: our_db_provider
+            # activate different ways to authenticate
+
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            #http_basic: ~
+
+            # https://symfony.com/doc/current/security/form_login_setup.html
+            #form_login: ~
+
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: show_employees
+
+            logout:
+                path:   /logout
+                target: login
+
+# # To get started with security, check out the documentation:
+# # https://symfony.com/doc/current/security.html
+# security:
+#     encoders:
+#       Symfony\Component\Security\Core\User\User: plaintext
+#     role_hierarchy:
+#       ROLE_ADMIN: [ROLE_USER]
+#     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+#     providers:
+#       chain_provider:
+#         chain:
+#           providers: [in_memory]
+#       in_memory:
+#         memory:
+#           users:
+#             admin: {password: adminpass, roles: ROLE_ADMIN}
+#             user:  {password: userpass, roles: ROLE_USER}
+
+#     firewalls:
+#         # disables authentication for assets and the profiler, adapt it according to your needs
+#         dev:
+#             pattern: ^/(_(profiler|wdt)|css|images|js)/
+#             security: false
+#         main:
+#             anonymous: ~
+#             # activate different ways to authenticate
+
+#             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+#             #http_basic: ~
+
+#             # https://symfony.com/doc/current/security/form_login_setup.html
+#             #form_login: ~
+
+#             form_login:
+#                 login_path: login
+#                 check_path: login
+#                 default_target_path: crudetest_index
+
+#             logout:
+#                 path:   /logout
+#                 target: login                

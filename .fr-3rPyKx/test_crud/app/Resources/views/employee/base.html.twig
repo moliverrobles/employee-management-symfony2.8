@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Test Application{% endblock %}</title>
+        {% block stylesheets %}
+            <link href="{{ asset('bundles/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+            <link href="{{ asset('bundles/employee/css/navi.css') }}" rel="stylesheet" />
+            <link href="{{ asset('bundles/employee/css/main.css') }}" rel="stylesheet"/>
+            <link href="{{ asset('bbundles/datepicker/dist/css/bootstrap-datepicker.min.css') }}" rel="stylesheet"/>
+        {% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('bundles/bootstrap/js/bootstrap.js') }}"></script>
+            <script src="{{ asset('bundles/bootstrap/js/jquery.min.js') }}"></script>
+            <script src="{{ asset('bundles/bootstrap/js/jquery.js') }}"></script>
+            <script src="{{ asset('bundles/employee/js/navi.js') }}"></script>
+            <script src="{{ asset('bundles/employee/js/jPages.js') }}"></script>
+            <script src="{{ asset('bundles/datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
+            {# <script src="{{ asset('bundles/jquery-3.3.1.min.js') }}"></script>#}   
+        {% endblock %}
+    </head>
+    <body>
+        {% if is_granted('ROLE_USER') %}
+            {% block topbar %}
+                <div class="topBar">
+                    <div id="new">
+                        <div class="logo col-sm-10">
+                            {# <img width="19%" src="{{ asset('apple-touch-icon.png') }}" /> #}EMP MANAGEMENT
+                         </div>
+                        <div class="col-sm-2 pull-right">
+                            <a href="{{ path('logout') }}" class='btn btn-info btn-sm' ></span>{{ app.user.username }} - LOGOUT</a>
+                        </div>
+                        <div class="col-sm-6 pull-right">
+                             {% set flashbag_notices = app.session.flashbag.get('notice') %}
+                            {% if flashbag_notices is not empty %}
+                                <div class="alert">
+                                    {% for notice in flashbag_notices %}
+                                      <span class="closebtn" onclick="this.parentElement.style.display='none';">
+                                            <span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-remove"></span>
+                                      </span> 
+                                      {{ notice }}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>  
+                </div>
+            {% endblock %}
+            <nav class="navbar navbar-inverse sidebar" role="navigation">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="">
+                                <a href="{{ path('show_users') }}">Users<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-home"></span></a>
+                            </li>
+                            <li class="">
+                                <a href="{{ path('show_employees') }}">Employees<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-user"></span></a>
+                            </li>
+                            <li> 
+                                <a href="{# {{ path('attendance_records') }}  #}
+                                {{ path('attendance_records', { 'id': 'now'|date("Y-m-d") }) }}">Attendance<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-list-alt"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="main">
+                {% block body %}
+                {% endblock %}
+            </div>
+            {% else %}
+            <div id="loginx" class="loginx">
+                <div class="row">
+                    <div id="new" class="col-sm-6">
+                        <form action="{{ path('login') }}" method="post" id="login_form">
+                            <div class="col-sm-5">
+                                <input type="text" id="username" name="_username" value="" placeholder="username" />
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="password" id="password" name="_password" placeholder="password" />
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="submit">login</button>
+                            </div>
+                            
+                        </form>
+                    </div>
+                </div>
+                {# <div class="col-sm-1">
+                    <a style="color:white" href="{{ path('user_registration') }}" class='btn btn-info btn-sm btn-block' >REGISTER</a>
+                </div> #}
+                <div class="row">
+                    <div id="buttons" class="col-sm-3">
+                        <button id="loginAdmin" class="btn btn-info btn-sm">ADMIN LOGIN</button>
+                        <a style="color:white" href="{{ path('employee_attendance') }}" class='btn btn-info btn-sm' >EMPLOYEE ATTENDANCE</a>
+                    </div>
+                    <div class="pull-right col-sm-1">
+                        <h3>EMS</h3>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <br>
+            <br>            
+        {% endif %} 
+    </body>
+   <script>
+    $(document).ready(function(){
+        $("#loginx #new").hide();
+        
+        $("#loginAdmin").click(function(){
+            $("#loginx #new").toggle(1000);
+        });
+    });
+
+    
+    </script>
+</html>
+

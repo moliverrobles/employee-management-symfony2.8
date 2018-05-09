@@ -1,0 +1,103 @@
+{% extends 'employee/base.html.twig' %}
+
+{% block body %}
+<div class="well table table-striped custab">
+    <div class="row">
+        <div class="input">
+        <hr/>
+        <h4>Employee Name</h4>
+        {{ form_start(form) }}
+            {# --------------------------- #}
+            <div class="name row">
+                <div class="col-sm-4">
+                    {# {{ form_widget(form.field, { 'id': 'idname',  'attr': { 'class' : 'my_custom_class' },  'attr':{'class': 'input-box'}}) }} #}
+                    {{ form_label(form.firstName) }}
+                    {{ form_widget(form.firstName, { 'id': 'lastName',  'attr':{'class': 'input-box'}}) }}
+                </div>
+
+                <div class="col-sm-4">
+                    {{ form_label(form.middleName) }}
+                    {{ form_widget(form.middleName, { 'id': 'middleName',  'attr':{'class': 'input-box'}}) }}
+                </div>
+
+                <div class="col-sm-4">
+                    {{ form_label(form.lastName) }}
+                    {{ form_widget(form.lastName, { 'id': 'lastName',  'attr':{'class': 'input-box'}}) }}
+                </div>
+            </div>
+            <hr/>
+            {# --------------------------- #}
+            <h4>Employee Details</h4>
+            {# --------------------------- #}
+            <div class="row">
+                <div class="col-sm-4">
+                    {{ form_label(form.address) }}
+                    {{ form_widget(form.address, { 'id': 'address',  'attr':{'class': 'input-box'}}) }}
+                </div>
+                <div class="col-sm-4">
+                    {{ form_label(form.contactDetails) }}
+                    {{ form_widget(form.contactDetails, { 'id': 'contactDetails',  'attr':{'class': 'input-box'}}) }}
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-sm-4">
+                    {{ form_label(form.gender) }}
+                    {{ form_widget(form.gender, { 'id': 'gender',  'attr':{'class': 'input-box'}}) }}
+                </div>
+                <div class="col-sm-4">
+                    {{ form_label(form.status) }}
+                    {{ form_widget(form.status, { 'id': 'status',  'attr':{'class': 'input-box'}}) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+
+                    {{ form_label(form.dob) }}
+                    {{ form_widget(form.dob, { 'id': 'dob',  'attr':{'class': 'input-box'}}) }}
+                </div>
+
+                <div class="col-sm-4">
+
+                    {{ form_label(form.dateEmployement) }}
+                    {{ form_widget(form.dateEmployement,  { 'id': 'dateEmployement',  'attr':{'class': 'input-box'}}) }}
+                </div>
+            </div>
+            <hr/>
+            {# --------------------------- #}
+            <h4>Emergency Contact Details</h4>
+            {# --------------------------- #}
+            <div class="row">
+                <div class="col-sm-4">
+                    {{ form_label(form.emergencyName)}}
+                    {{ form_widget(form.emergencyName,{'label':'Name', 'attr':{'class' : 'input-box'}})}}
+                    
+                </div>
+
+                <div class="col-sm-4">
+                    {{ form_row(form.emergencyRelation,{'label':'Relation', 'attr':{'class' : 'input-box'}})}}
+                </div>
+
+                <div class="col-sm-4">
+                   {{ form_row(form.emergencyContact,{'label':'Contact no#:', 'attr':{'class' : 'input-box'}})}}
+                </div>
+            </div>
+            {# --------------------------- #}
+        </div>
+        <div class="submit">
+            <hr/>
+            <div class="row">
+                <div class="col-sm-8">
+                    <a href="{{ path('show_employees') }}" class='pull-left btn btn-info btn-sm' >
+                    <span class="glyphicon glyphicon-arrow-left"></span> BACK</a>
+                </div>
+                <div class="col-sm-4 ">
+                    <input class="pull-right btn btn-sm btn-info" type="reset">
+                    <input class="pull-right btn btn-sm btn-success" type="submit" value="Create" />
+                </div>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

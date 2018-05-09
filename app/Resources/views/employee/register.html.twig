@@ -1,0 +1,101 @@
+{# app/Resources/views/registration/register.html.twig #}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>REGISTER</title>
+	{% block stylesheets %}
+    	<link href="{{ asset('bundles/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
+    	<link href="{{ asset('bundles/employee/css/navi.css') }}" rel="stylesheet" />
+    	<link href="{{ asset('bundles/employee/css/main.css') }}" rel="stylesheet"/>
+	{% endblock %}
+</head>
+<body>
+	{% block body %}
+	<div class="container">
+		{{ form_start(form) }}
+
+	    <hr/>
+
+		<div class="row">
+		    <div class="col-sm-2">
+		    </div>
+		    <div class="col-sm-2">
+		    	{{ form_label(form.username) }}
+		    </div>
+		    <div class="col-sm-4">
+		    	{{ form_widget(form.username, { 'id': 'uname',  'attr':{'class': 'form-control'}}) }}
+			</div>
+		</div>
+
+	    <hr/>
+
+		<div class="row">
+		    <div class="col-sm-2">
+		    </div>
+		    <div class="col-sm-2">
+		    	{{ form_label(form.email) }}
+		    </div>
+		    <div class="col-sm-4">
+		   		{{ form_widget(form.email, { 'id': 'email',  'attr':{'class': 'form-control'}}) }}
+		   	</div>
+		</div>
+
+
+	    <hr/>
+
+
+		<div class="row">
+		    <div class="col-sm-2">
+		    </div>
+		    <div class="col-sm-2">
+		   		{{ form_label(form.plainPassword.first) }}
+		   	</div>
+		    <div class="col-sm-4">
+		    	{{ form_widget(form.plainPassword.first, { 'id': 'password',  'attr':{'class': 'form-control'}}) }}
+		    </div>
+		</div>
+
+
+	    <hr/>
+
+
+		<div class="row">
+		    <div class="col-sm-2">
+		    </div>
+		    <div class="col-sm-2">
+		    	{{ form_label(form.plainPassword.second) }}
+		    </div>
+		    <div class="col-sm-4">
+		    	{{ form_widget(form.plainPassword.second, { 'id': 'conpassword',  'attr':{'class': 'form-control'}}) }}
+		    </div>
+	    </div>
+
+
+	    <hr/>
+
+
+	    <div class="row">
+		    <div class="col-sm-2">
+		    </div>
+	    	<div class="col-sm-4">		    
+	    		<button type="submit">Register!</button>
+	    	</div>
+
+		</div>
+		{{ form_end(form) }}
+	</div>
+	{% endblock %}
+</body>
+
+{% block javascripts %}
+    <script src="{{ asset('bundles/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('bundles/bootstrap/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('bundles/employee/js/navi.js') }}"></script>
+{% endblock %}
+
+</html>
+
+
+
+
+

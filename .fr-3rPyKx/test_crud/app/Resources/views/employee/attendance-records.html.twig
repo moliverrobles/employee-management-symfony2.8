@@ -1,0 +1,136 @@
+{% extends 'employee/base.html.twig' %}{# links the base html #}
+{% block body %}{# this is linked in base html and inherited by views #}
+
+  <div class="well container-fluid">
+    <div class="row">
+      <div class="search row">
+        {#<div class="col-sm-1">
+          <button class="dateBackward pull-right"><</button>
+        </div> #}
+        <div class="col-sm-5">
+          {{ form_start(form) }}
+            {{ form_widget(form.timeIn,  {'id': 'selectDate','attr':{'class': 'form-control select'}}) }}
+          {{ form_end(form) }}
+        </div>
+        {# <div class="col-sm-1">
+          <button class="dateForward pull-left">></button>
+        </div> #}
+        <div class="pull-left col-sm-5">
+            <button class="btn btn-sm btn-info" id="search">SEARCH</button>
+            <a class="btn btn-sm btn-info"href="{{ path('attendance_records', { 'id': 'now'|date("Y-m-d") }) }}">TODAY</a>
+            <a class="btn btn-sm btn-info"href="{{ path('attendance_records', { 'id': 'all' }) }}">SHOW ALL</a>
+        </div>
+      </div>
+      <div class=" col-sm-12">
+          <div class="row">
+            <div class="col-sm-1">
+
+            </div>
+            <div class="col-sm-5">
+              <b>Name
+            </div>
+            <div class="col-sm-3">
+              Time-in
+            </div>
+            <div class="col-sm-3">
+              Time-out</b>
+            </div>
+          </div>
+          {% for employeesRecords in employeesRecords %}
+          <div class="row">
+            <div class="text-right col-sm-1">
+              <b>{{ loop.index }}.)</b> 
+            </div>
+            <div class="col-sm-5">
+                  <a href="{{ path('show_employee', { 'id': employeesRecords.valId }) }}" class="btn btn-xs btn-info">_</a> {{ employeesRecords.firstName }} {{ employeesRecords.lastName }}
+            </div>
+            <div class="datetime col-sm-3">
+              {{ employeesRecords.timeIn |date('Y-m-d H:i:s') }}
+            </div>
+            <div class="col-sm-3">
+              {% if employeesRecords.timeOut is empty %}
+                <small><u><i>~no time-out time~</i></u></small>
+              {% else %}
+                {{ employeesRecords.timeOut |date('Y-m-d H:i:s') }}
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+    {# 
+            <div>
+               <table id="table_id" style="width:100%">
+                  <tr>
+                    <th>Employee</th>
+                    <th>Time in</th>
+                    <th>Time out</th>
+                  </tr>
+                  {% for employeesRecords in employeesRecords %}
+                  <tr>
+                    <td>{{ employeesRecords.empId.fullName }}</td>
+                    <td>{{ employeesRecords.timeIn |date('Y-m-d H:i:s') }}</td>
+                    {% if employeesRecords.timeOut is empty %}
+                      <td><b>not timed out</b></td>
+                    {% else %}
+                      <td>{{ employeesRecords.timeOut |date('Y-m-d H:i:s') }}</td>
+                    {% endif %}
+
+                  </tr>
+                  {% endfor %}
+                </table> 
+            </div> #}
+      </div>
+    </div>
+    <hr/>
+    <div class="notes">
+      <p>
+        <i>
+          <small>
+            _database <b>employeeManagement</b>, table <b>crudetest</b> use: id col
+          </small>
+        </i>
+      </p>
+      <p>
+        <i>
+          <small>
+            ___delete prompt pass through AJAX, delete line, animation fade
+          </small>
+        </i>
+      </p>
+    </div>
+    <hr/>
+  </div>
+  <script type="text/javascript">
+  $('#search').click(function() {
+
+    var id= $('#selectDate').val();
+      $.ajax({
+        type: "GET",
+        url: "{{ path('attendance_records', { 'id': 'id' }) }}".replace('id', id),
+        success: function(){
+          window.location.href = "{{ path('attendance_records', { 'id': 'id' }) }}".replace('id', id);
+        }
+      });
+  });
+  </script>
+  <script type="text/javascript">
+   {# $('.dateForward').click(function() {
+
+    var d = new Date();
+
+    var curr_date = d.getDate('dd');
+    var curr_month = d.getMonth() + 1;
+    var curr_year = d.getFullYear();
+
+    var id = curr_year + "-" + curr_month + "-" + curr_date;
+    alert(id);
+    $.ajax({
+        type: "GET",
+        url: "{{ path('attendance_records', { 'id': 'id' }) }}".replace('id', id),
+        success: function(){
+          window.location.href = "{{ path('attendance_records', { 'id': 'id' }) }}".replace('id', id);
+        }
+      });
+  });
+  #}
+  </script>
+{% endblock %}

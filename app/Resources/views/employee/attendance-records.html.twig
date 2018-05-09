@@ -1,0 +1,301 @@
+{% extends 'employee/base.html.twig' %}{# links the base html #}
+{% block body %}{# this is linked in base html and inherited by views #}
+
+  <div class="well container-fluid">
+    <div class="row">
+      <div class="search row">
+        {#<div class="col-sm-1">
+          <button class="dateBackward pull-right"><</button>
+        </div> #}
+        <div class="col-sm-3">
+          {{ form_start(form) }}
+            {{ form_widget(form.timeIn,  {'id': 'selectDate','attr':{'class': 'select_date form-control select'}}) }}
+          {{ form_end(form) }}
+        </div>
+        {# <div class="col-sm-1">
+          <button class="dateForward pull-left">></button>
+        </div> #}
+        <div class="pull-left col-sm-5">
+            <button class="btn btn-xs btn-info" id="search">SEARCH</button>
+            <a class="btn btn-xs btn-info"href="{{ path('attendance_records', { 'id': 'now'|date("Y-m-d") }) }}">TODAY</a>
+            <a class="btn btn-xs btn-info"href="{{ path('attendance_records', { 'id': 'all' }) }}">SHOW ALL</a>
+        </div>        
+      </div>
+      <div class=" col-sm-12">
+        {% if date != 'all'%}
+        <div class="row dateNavigation">
+          <div class="col-sm-4">
+            {% set previous  = date|date_modify("-1 day")|date("Y-m-d") %}
+            {% set next = date|date_modify("+1 day")|date("Y-m-d") %}
+            <a class="btn btn-xl btn-primary"href="{{ path('attendance_records', { 'id': previous }) }}">
+              <span class="glyphicon glyphicon-backward"></span> Prev
+            </a>
+          </div>
+          <div class="col-sm-1">
+          </div>
+          <div class="col-sm-3">
+            <b>{{ date }}</b>
+            <b>{{ date|date('D') }}</b>
+          </div>
+          <div class="col-sm-4">
+            {% if date <=  "now"|date('Y-m-d') %}
+              <a class="pull-right btn btn-xl btn-primary"href="{{ path('attendance_records', { 'id': next }) }}">
+              Next <span class="glyphicon glyphicon-forward"></span>
+            </a>
+            {% endif %}
+
+          </div>
+        </div>
+        {% endif %}
+          <div class="row">
+            <div class="col-sm-1">
+
+            </div>
+            <div class="col-sm-5">
+              <b>Name
+            </div>
+            <div class="col-sm-3">
+              Time-in
+            </div>
+            <div class="col-sm-3">
+              Time-out</b>
+            </div>
+          </div>
+        </div>
+        {% if date !='all' %}
+          {% for employeesRecords in employeesRecords %}
+          <div class="row">
+            <div class="text-right col-sm-1">
+
+              <a href="{{ path('show_employee', { 'id': employeesRecords.valId }) }}">
+                <b>{{ loop.index }}.)</b>
+              </a>
+
+            </div>
+            <div class="col-sm-5">
+              {% if date != 'all'%}
+              <a data-toggle="modal" data-target="#modalBox{{ employeesRecords.valId }}">
+                {{ employeesRecords.firstName }} {{ employeesRecords.lastName }}
+              </a>
+
+              <!-- Modal -->
+              <div id="modalBox{{ employeesRecords.valId }}" class="modal fade" role="dialog">
+                <div class="modal-dialog">
+
+                  <!-- Modal content-->
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">
+                        <div class="col-sm-7">
+                          <b>{{ employeesRecords.firstName }} {{ employeesRecords.middleName }} {{ employeesRecords.lastName }}</b>
+                        </div>
+                        <div class="col-sm-4">
+                          <small class="pull-right">
+                            {{ employeesRecords.timeIn |date('Y-m-d H:i:s ') }} (IN)<br>
+                            {{ employeesRecords.timeOut |date('Y-m-d H:i:s ') }} (OUT)
+                          </small>
+                        </div>
+                      </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                        <label>Conatct Details</label><br/>
+                        <div class="col-sm-6">
+                          <b>Contact No#: </b>
+                          {% if employeesRecords.contactDetails is empty %}
+                            <i>~empty</i>
+                          {% else %}  
+                            {{ employeesRecords.contactDetails }}
+                          {% endif %}
+                        </div>
+                        <div class="col-sm-6">
+                          {% if employeesRecords.address is empty %}
+                            <i>~empty</i>
+                          {% else %}  
+                            <b>Address: </b>{{ employeesRecords.address }}
+                          {% endif %}
+                        </div>
+                      </div><hr/>
+                      <div class="row">
+                        <label>Emergency Contact</label><br/>
+                        {% if employeesRecords.emergencyName is empty %}
+                          <div class="col-sm-12">
+                             <b>Name: </b><i>~empty</i>
+                          </div>
+                        {% else %}
+                          <div class="col-sm-5">
+                            <b>Name: </b>{{ employeesRecords.emergencyName }}
+                          </div>
+                          <div class="col-sm-3">
+                            <b>Relation: </b>{{ employeesRecords.emergencyRelation }}
+                          </div>
+                          <div class="col-sm-4">
+                            <b>Contact: </b> {{ employeesRecords.emergencyContact }}
+                          </div>
+                        {% endif %}
+                        <br/>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+              <!-- Modal -->
+          </div>
+        {% endif %}
+            <div class="datetime col-sm-3">
+              {{ employeesRecords.timeIn |date('Y-m-d H:i:s ') }}
+              {% if employeesRecords.timeIn |date('Y-m-d H:i:s') >  date|date('Y-m-d 08:15:00') %}
+                  <small><i><b>(late)</b></i></small>
+              {% endif %}
+            </div>
+            <div class="col-sm-3">
+              {% if employeesRecords.timeOut is empty %}
+                <small><u><i>~no time-out time~</i></u></small>
+              {% else %}
+                {{ employeesRecords.timeOut|date('Y-m-d H:i:s') }}
+                {% if employeesRecords.timeOut |date('Y-m-d H:i:s') <  date|date('Y-m-d 17:00:00') %}
+                  <small><i><b>(undertime)</b></i></small>{# 
+                {% elseif employeesRecords.timeOut|date('Y-m-d H:i:s') > date|date('Y-m-d 17:15:00') %}
+                  <small><i><b>(overtime)</b></i></small> #}
+                {% else %}
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+          {% else %}
+            <div class="row">
+              <div class="col-sm-12">
+                {% if (date|date('N') == 6) or (date|date('N') == 7) %}
+                  No results. (weekend).
+                {% else %}
+                  No results.
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}
+        {% if date == 'all' %}  
+          {% set start_date = null %}
+          {% set end_date = null %}
+          {% for employeesRecords in employeesRecords %}
+            {% if loop.first %}
+              {% set start_date = employeesRecords.timeIn|date('Y-m-d')%}
+            {% endif %}
+            {# {% set start_date = employeesRecords.timeIn|date('Y-m-d') %} #}
+            {% set end_date = "now"|date('Y-m-d') %}
+          {% endfor %}
+          {% for x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}{# 86400 seconds = 1 day #}
+            {% if (x|date('N') == 6) or (x|date('N') == 7) %}
+            <div class="row">
+              <div class="interval-weekend col-sm-12">
+                <label class="">
+                  {{ x|date('Y-F-d') }}
+                </label>
+                <label class="pull-right">
+                  {{ x|date('(D)') }}
+                </label>
+              </div>
+            </div>
+            {% else %}
+            <div class="row">
+              <div class="interval-weekday col-sm-12">
+                <label class=""><a href="{{ path('attendance_records', { 'id': x|date("Y-m-d") }) }}"> {{ x|date('Y-F-d') }}</a></label><br>
+              </div>
+            </div>
+            {% endif %}
+            <div class="row">
+              {% for employeesRecords in employeesRecords %}
+                {% if x|date('Y-m-d') == employeesRecords.timeIn|date('Y-m-d')  %}
+                  <div class="attendanceEntry row">
+                    <div class="col-sm-1">
+
+                    </div>
+                    <div class="col-sm-5">
+                      {{ employeesRecords.firstName }} {{ employeesRecords.lastName }}<br/>
+                    </div>
+                    <div class="timeInColumn col-sm-3">
+                      {{ employeesRecords.timeIn |date('M-d H:i:s ') }}
+                    </div>
+                    <div class="timeOutColumn col-sm-3">
+                       {{ employeesRecords.timeOut |date('M-d H:i:s ') }}
+                    </div>  
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endfor %}
+        {% endif %}
+    {# 
+            <div>
+               <table id="table_id" style="width:100%">
+                  <tr>
+                    <th>Employee</th>
+                    <th>Time in</th>
+                    <th>Time out</th>
+                  </tr>
+                  {% for employeesRecords in employeesRecords %}
+                  <tr>
+                    <td>{{ employeesRecords.empId.fullName }}</td>
+                    <td>{{ employeesRecords.timeIn |date('Y-m-d H:i:s') }}</td>
+                    {% if employeesRecords.timeOut is empty %}
+                      <td><b>not timed out</b></td>
+                    {% else %}
+                      <td>{{ employeesRecords.timeOut |date('Y-m-d H:i:s') }}</td>
+                    {% endif %}
+
+                  </tr>
+                  {% endfor %}
+                </table> 
+            </div> #}
+      </div>
+    </div>
+    <hr/>
+    <div class="notes">
+      <p>
+        <i>
+          <small>
+            pass date through AJAX(get date), use twig modify date -1 / +1 next-prev
+          </small>
+        </i>
+      </p>
+      <p>
+        <i>
+          <small>
+            if time in > date|date('Y-m-d 08:15:00') marked as late<br>
+            if timeOut <  date|date('Y-m-d 17:00:00') marked as undertime<br>
+            if timeOut >  date|date('Y-m-d 17:15:00') marked as overtime<br>
+            if (date|date('N') == 6) or (date|date('N') == 7) mark no results weekend (sat=6,sun=7)
+          </small>
+        </i>
+      </p>
+    </div>
+    <hr/>
+  </div>
+  <script type="text/javascript">
+  $( function() {
+    $( "#datepicker" ).datepicker();
+  } );
+  </script>
+  <script type="text/javascript">
+  $('#search').click(function() {
+
+    var id= $('#selectDate').val();
+      $.ajax({
+        type: "GET",
+        url: "{{ path('attendance_records', { 'id': 'id' }) }}".replace('id', id),
+        success: function(){
+          window.location.href = "{{ path('attendance_records', { 'id': 'id' }) }}".replace('id', id);
+        }
+      });
+  });
+  </script>
+  
+   {# 
+ 
+   #}
+{% endblock %}

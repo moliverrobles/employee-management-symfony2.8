@@ -1,0 +1,105 @@
+{% extends 'employee/base.html.twig' %}
+
+{% block body %}
+{# <div class="well table table-striped custab">
+    <a href="{{ path('show_employees') }}" class='btn btn-info btn-sm' >
+            <span class="glyphicon glyphicon-arrow-left"></span> BACK</a>
+    {{ form_start(editForm) }}
+        {{ form_widget(editForm) }}
+        <input type="submit" value="Save" class='btn btn-success btn-sm' />
+    {{ form_end(editForm) }}
+</div> #}
+<div class="well table table-striped custab">
+    <div class="row">
+        <div class="input">
+        <hr/>
+        <h4>Employee Name</h4>
+        {{ form_start(editForm) }}
+           <div class="name row">
+                <div class="col-sm-4">
+                    {# {{ form_widget(editForm.field, { 'id': 'idname',  'attr': { 'class' : 'my_custom_class' }} )}} #}
+                    {{ form_label(editForm.firstName) }}
+                    {{ form_widget(editForm.firstName, { 'id': 'lastName'} )}}
+                </div>
+
+                <div class="col-sm-4">
+                    {{ form_label(editForm.middleName) }}
+                    {{ form_widget(editForm.middleName, { 'id': 'middleName'} )}}
+                </div>
+
+                <div class="col-sm-4">
+                    {{ form_label(editForm.lastName) }}
+                    {{ form_widget(editForm.lastName, { 'id': 'lastName'} )}}
+                </div>
+            </div>
+            <hr/>
+             <h4>Employee Details</h4>
+            <div class="namerow">
+                <div class="col-sm-4">
+                    {{ form_label(editForm.address) }}
+                    {{ form_widget(editForm.address, { 'id': 'address'} )}}
+                </div>
+
+                <div class="col-sm-4">
+                    {{ form_label(editForm.contactDetails) }}
+                    {{ form_widget(editForm.contactDetails, { 'id': 'contactDetails'} )}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    {{ form_label(editForm.gender) }}
+                    {{ form_widget(editForm.gender, { 'id': 'gender'} )}}
+                </div>
+                <div class="col-sm-4">
+                    {{ form_label(editForm.status) }}
+                    {{ form_widget(editForm.status, { 'id': 'status'} )}}
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+
+                    {{ form_label(editForm.dob) }}
+                    {{ form_widget(editForm.dob, { 'id': 'dob',  'attr':{'placeholder': 'Date of Birth'}}) }}
+                </div>
+
+                <div class="col-sm-4">
+
+                    {{ form_label(editForm.dateEmployement) }}
+                    {{ form_widget(editForm.dateEmployement,  { 'id': 'dateEmployement',  'attr':{'placeholder': 'Date Employed'}}) }}
+                </div>
+            </div>
+            <hr/>
+            <h4>Emergency Contact Details</h4>
+            <div class="row">
+                <div class="col-sm-4">
+                    {{ form_row(editForm.emergencyName,{'label':'Name'})}}
+                </div>
+
+                <div class="col-sm-4">
+                     {{ form_row(editForm.emergencyRelation,{'label':'Relation'})}}
+                </div>
+
+                <div class="col-sm-4">
+                   {{ form_row(editForm.emergencyContact,{'label':'Contact no#:'})}}
+                </div>
+            </div>
+
+        </div>
+        <div class="submit">
+            <hr/>
+            <div class="row">
+                <div class="col-sm-8">
+                    <a href="{{ path('show_employees') }}" class='pull-left btn btn-info btn-sm' >
+                    <span class="glyphicon glyphicon-arrow-left"></span> BACK</a>
+                </div>
+                <div class="col-sm-4 ">
+                    <input type="submit" value="Save" class='pull-right btn btn-success btn-sm' />
+                </div>
+            </div>
+        </div>
+        {{ form_end(editForm) }}
+    </div>
+</div>
+{% endblock %}

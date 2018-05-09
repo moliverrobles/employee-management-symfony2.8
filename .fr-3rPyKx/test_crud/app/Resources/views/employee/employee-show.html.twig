@@ -1,0 +1,101 @@
+{# app/Resources/views/crudetest/index.html.twig #}
+{% extends 'employee/base.html.twig' %}
+{% block body %}
+    <div class="row">
+        <br/>
+        <br/>
+    </div>
+    <div class="row col-md-12 col-md-offset-2 show">
+        <div class="container">    
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4 >Id : {{ employee.id }}
+                                <a href="{{ path('edit_employee', { 'id': employee.id }) }}" class='btn btn-info btn-sm' >
+                                    <span class="glyphicon glyphicon-edit"></span> Edit</a>
+                                     <a href="{{ path('show_employees') }}" class='btn btn-info btn-sm' >
+                <span class="glyphicon glyphicon-arrow-left"></span> BACK</a>
+                                </h4>
+                                 {% set flashbag_notices = app.session.flashbag.get('notice') %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        
+                        <div class="col-md-8 col-xs-12 col-sm-6 col-lg-8" >
+                            <div class="container" >
+                                <h2>{{ employee.firstName|upper}} {{employee.middleName|upper }}  {{employee.lastName|upper }} </h2>
+                                <small><p>Employed on: {% if employee.dateEmployement %}{{ employee.dateEmployement|date('Y-M-d') }}{% endif %}</p></small>
+                            </div>
+                            <hr>
+                            <ul class="container details" >
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b><p><span class="glyphicon glyphicon-user one"></span> Gender</p></b>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        {{ employee.gender }}
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <b><p><span class="glyphicon glyphicon-user one"></span> Emergency Person</p></b>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        {{ employee.emergencyName }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b><p><span class="glyphicon glyphicon-home"></span> Address</p></b>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        {{ employee.address }}
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <b><p><span class="glyphicon glyphicon-home"></span> Em. Relation</p></b>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        {{ employee.emergencyRelation }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b><p><span class="glyphicon glyphicon-gift"></span> Birth Date</p></b>
+                                    </div>
+                                     <div class="col-sm-3">
+                                    {% if employee.dob %}{{ employee.dob|date('Y-M-d') }}{% endif %}</p>
+                                    </div>
+                                     <div class="col-sm-2">
+                                        <b><p><span class="glyphicon glyphicon-phone-alt"></span> Em.  Contact No#</p></b>
+                                    </div>
+
+                                    <div class="col-sm-3">
+                                        {{ employee.emergencyContact }}
+                                    </div>
+                                    
+                                </div>
+                            </ul>
+                            <hr>
+                            <ul class="container details">
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        <b><p><span class="glyphicon glyphicon-phone-alt"></span> Contact </p></b>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <p> {{ employee.contactDetails }}</p>
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
