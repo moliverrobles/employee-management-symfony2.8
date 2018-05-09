@@ -11,6 +11,9 @@
           {{ form_start(form) }}
             {{ form_widget(form.timeIn,  {'id': 'selectDate','attr':{'class': 'select_date form-control select', 'value':date}}) }}
         </div>
+        <div class="col-sm-1">
+            <Center><h5>to</h5></Center>
+        </div>
         <div class="col-sm-3">
             {{ form_widget(form.timeOut,  {'id': 'selectDateTo','attr':{'class': 'select_date form-control select', 'value':dateTo}}) }}
 
