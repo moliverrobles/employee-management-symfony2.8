@@ -199,7 +199,7 @@ class EmployeeController extends Controller
             'attendanceRecord' =>  $attendanceRecord,
             'form' => $form->createView(),
             'employeesRecords' => $employeesRecords,
-            'date' => $id,
+            'date' => 'today',
             'dateTo' => $id2,
             'dateFrom' => $id,
         ));

@@ -28,7 +28,7 @@
         </div>        
       </div>
       <div class=" col-sm-12">
-        {% if date != 'all' %}
+        {% if date != 'today' %}
         <div class="row dateNavigation">
           <div class="col-sm-4">
             {% set previous  = date|date_modify("-1 day")|date("Y-m-d") %}
@@ -52,6 +52,25 @@
 
           </div>
         </div>
+        {% else %}
+        <div class="row dateNavigation">
+          <div class="col-sm-1">
+          </div>
+          <div class="pull-left col-sm-4">
+            <b>{{ dateTo }}</b>
+            <b>{{ dateTo|date('D') }}</b>
+          </div>
+          <div class="col-sm-2">
+            to
+          </div>
+          <div class="pull-right col-sm-4">
+            <b>{{ dateFrom }}</b>
+            <b>{{ dateFrom|date('D') }}</b>
+          </div>
+
+          <div class="col-sm-1">
+          </div>
+        </div><hr/>
         {% endif %}
           <div class="row">
             <div class="col-sm-1">
@@ -185,82 +204,6 @@
             </div>
           {% endfor %}
         {% endif %}
-        {% if date == 'all' %}  
-          {% set start_date = dateFrom %}
-          {% set end_date = dateTo %}
-          {% for employeesRecords in employeesRecords %}
-            {% if loop.first %}
-              {% set start_date = employeesRecords.timeIn|date('Y-m-d')%}
-            {% endif %}
-            {# {% set start_date = employeesRecords.timeIn|date('Y-m-d') %} #}
-            {% set end_date = dateTo|date('Y-m-d') %}
-          {% endfor %}
-          {% for x in range(start_date|date('U'), end_date|date('U'), 86400 ) %}{# 86400 seconds = 1 day #}
-            {% if (x|date('N') == 6) or (x|date('N') == 7) %}
-            <div class="row">
-              <div class="interval-weekend col-sm-12">
-                <label class="">
-                  {{ x|date('Y-F-d') }}
-                </label>
-                <label class="pull-right">
-                  {{ x|date('(D)') }}
-                </label>
-              </div>
-            </div>
-            {% else %}
-            <div class="row">
-              <div class="interval-weekday col-sm-12">
-                <label class=""><a href="{{ path('attendance_records', { 'id': x|date("Y-m-d") }) }}"> {{ x|date('Y-F-d') }}</a></label><br>
-              </div>
-            </div>
-            {% endif %}
-            <div class="row">
-              {% for employeesRecords in employeesRecords %}
-                {% if x|date('Y-m-d') == employeesRecords.timeIn|date('Y-m-d')  %}
-                  <div class="attendanceEntry row">
-                    <div class="col-sm-1">
-
-                    </div>
-                    <div class="col-sm-5">
-                      {{ employeesRecords.firstName }} {{ employeesRecords.lastName }}<br/>
-                    </div>
-                    <div class="timeInColumn col-sm-3">
-                      {{ employeesRecords.timeIn|date('M-d H:i:s ') }}
-                    </div>
-                    <div class="timeOutColumn col-sm-3">
-                      {% if employeesRecords.timeIn|date('Y-m-d')  != null %}
-                        {{ employeesRecords.timeOut|date('M-d H:i:s ') }}
-
-                      {% endif %}
-                    </div>  
-                  </div>
-                {% endif %}
-              {% endfor %}
-            </div>
-          {% endfor %}
-        {% endif %}
-    {# 
-            <div>
-               <table id="table_id" style="width:100%">
-                  <tr>
-                    <th>Employee</th>
-                    <th>Time in</th>
-                    <th>Time out</th>
-                  </tr>
-                  {% for employeesRecords in employeesRecords %}
-                  <tr>
-                    <td>{{ employeesRecords.empId.fullName }}</td>
-                    <td>{{ employeesRecords.timeIn |date('Y-m-d H:i:s') }}</td>
-                    {% if employeesRecords.timeOut is empty %}
-                      <td><b>not timed out</b></td>
-                    {% else %}
-                      <td>{{ employeesRecords.timeOut |date('Y-m-d H:i:s') }}</td>
-                    {% endif %}
-
-                  </tr>
-                  {% endfor %}
-                </table> 
-            </div> #}
       </div>
     </div>
     <hr/>
