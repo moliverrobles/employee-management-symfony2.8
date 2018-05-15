@@ -31,9 +31,11 @@ class SearchAttendanceRecordsType extends AbstractType
             )*/
             ->add('timeIn', DateType::class, array(
                 'widget' => 'single_text',
+                'html5' => false,
                 ))
             ->add('timeOut', DateType::class, array(
                 'widget' => 'single_text',
+                'html5' => false,
                 ))/*
             ->add('timeOut', DateType::class, array(
                 'widget' => 'single_text',

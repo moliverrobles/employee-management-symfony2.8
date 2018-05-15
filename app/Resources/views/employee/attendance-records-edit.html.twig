@@ -1,0 +1,118 @@
+{# app/Resources/views/crudetest/index.html.twig #}
+{% extends 'employee/base.html.twig' %}
+{% block body %}
+    <div class="row">
+        <br/>
+        <br/>
+    </div>
+    <div class="row col-md-12 col-md-offset-2 show">
+        {% for employee in employee %}
+        <div class="container">    
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="row"><br/>
+                            <div class="col-sm-6">
+                                     <a href="{{ path('attendance_records',{'id': employee.timeIn|date('Y-m-d')}) }}" class='btn btn-info btn-sm' >
+                                        <span class="glyphicon glyphicon-arrow-left"></span> BACK
+                                    </a>
+                            {{ employee.empId.firstName}}
+                            {{ employee.empId.middleName}}
+                            {{ employee.empId.lastName}}
+                            </div>
+                            <div class="pull-right col-sm-2">
+                            {% if employee.numberOfEdits != null %}
+                                Edited <b>( {{ employee.numberOfEdits}} )</b> times.
+                            {% else %}
+                                Not Edited yet.
+                            {% endif %}
+                            {% if employee.remark != null %}
+                                Remark(s): {{ employee.remark }}
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="col-sm-12" >
+                            <div class="container" >
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                    </div>
+                                    <div class="col-sm-6">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    {{ form_start(form) }}
+                                    <div class="col-sm-6">
+                                        <label>time-in</label>
+
+                                        {% if  employee.timeIn != null %}
+                                            {% set tIn = employee.timeIn|date('Y-m-d H:i:s') %}
+                                        {% else %}
+                                            {% set tIn = null %}
+                                        {% endif %}
+
+
+                                        {% if  employee.timeOut != null %}
+                                            {% set tOut = employee.timeOut|date('Y-m-d H:i:s') %}
+                                         {% else %}
+                                            {% set tOut = 'no-timeout-set' %}
+                                        {% endif %}
+  
+
+                                        {{ form_widget(form.timeIn,  {'id':'timeIn','attr':{'value':tIn,'class':'datepicker'}}) }}
+                                    </div>
+                                    <div class="col-sm-6">
+
+                                        <label>time-out</label>
+                                        {{ form_widget(form.timeOut,  {'id':'timeOut','attr':{'value':tOut, 'class':'datepicker'}}) }}
+                                        {% set editCOunt = (employee.numberOfEdits + 1) %}
+                                        {% set inOutEdits = employee.timeInOutEdits~' , '~tIn~'|'~tOut %}
+                                        {{ form_widget(form.timeInOutEdits,  {'attr':{'value':inOutEdits}}) }}
+                                        {{ form_widget(form.numberOfEdits,  {'attr':{'value':editCOunt}}) }}
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <br/><button class="btn btn-success">SAVE</button>
+                                    </div>
+                                    {{ form_end(form)}}
+                                </div><br/>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                    <label>Current:</label> <br/>{{ tIn }} {{ tOut }}<hr/>
+                                    <label>Edit History(time-in | time-out)</label>
+                                    {% set foo = employee.timeInOutEdits|split(',') %}
+                                    {% if employee.timeInOutEdits is empty %}
+                                        <br/>no edits
+                                    {% else %}
+                                    {% for foo in foo %}
+                                        {% if loop.first %}<hr/>
+                                        {% else %}
+                                            {{loop.index-1}}.){{foo}}<hr/>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% endif  %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+<script type="text/javascript">
+    $('.datepicker').datetimepicker({
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1,
+
+        format: 'yyyy-mm-dd hh:mm:ss'
+    });
+</script>            
+{% endblock %}

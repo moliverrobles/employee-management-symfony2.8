@@ -4,15 +4,21 @@
         <meta charset="UTF-8">
         <title>{% block title %}Test Application{% endblock %}</title>
         {% block stylesheets %}
+            <link href="{{ asset('bundles/bootstrap/css/bootstrap.css') }}" rel="stylesheet" />
             <link href="{{ asset('bundles/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" />
             <link href="{{ asset('bundles/employee/css/navi.css') }}" rel="stylesheet" />
             <link href="{{ asset('bundles/employee/css/main.css') }}" rel="stylesheet"/>
+            <link href="{{ asset('bundles/datepicker/bootstrap-datetimepicker.css') }}" rel="stylesheet"/>
+            <link href="{{ asset('bundles/datepicker/bootstrap-datetimepicker.min.css') }}" rel="stylesheet"/>
             <link href="{{ asset('bundles/datepicker/jquery-ui.css') }}" rel="stylesheet"/>
         {% endblock %}
         {% block javascripts %}
             <script src="{{ asset('bundles/bootstrap/js/jquery.min.js') }}"></script>
             <script src="{{ asset('bundles/bootstrap/js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('bundles/datepicker/bootstrap-datetimepicker.min.js') }}"></script>
             <script src="{{ asset('bundles/employee/js/navi.js') }}"></script>
+            <script src="{{ asset('bundles/datepicker/bootstrap-datetimepicker.js') }}"></script>
+            <script src="{{ asset('bundles/datepicker/bootstrap-datetimepicker.min.js') }}"></script>
             <script src="{{ asset('bundles/datepicker/jquery-ui.js') }}"></script>
             {# <script src="{{ asset('bundles/jquery-3.3.1.min.js') }}"></script>#}   
         {% endblock %}

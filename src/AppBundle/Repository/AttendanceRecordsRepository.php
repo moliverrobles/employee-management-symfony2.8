@@ -16,9 +16,9 @@ class AttendanceRecordsRepository extends EntityRepository
 
 	public function findEmpAndDate($id)
 	{
-		$setNull = null;
-		$date = new \DateTime('now');
-		$query = $this->createQueryBuilder('AR')
+	$setNull = null;
+	$date = new \DateTime('now');
+	$query = $this->createQueryBuilder('AR')
        ->select('IDENTITY(AR.empId)','AR.timeIn', 'AR.timeOut')
        ->andWhere('AR.empId = :id')
        ->setParameter('id', $id)
@@ -30,41 +30,31 @@ class AttendanceRecordsRepository extends EntityRepository
 	}
 	public function findTimeOut($id)
 	{
-        $setNull = null;
         $date = new \DateTime('now');
-        $date->setTime(0, 0, 0);
+        $timeStart = $date->format('Y-m-d 00:00:00');
+        $timeEnd = $date->format('Y-m-d 23:59:59');
 
-		$query = $this->createQueryBuilder('AR')
+	  $query = $this->createQueryBuilder('AR')
        ->select('IDENTITY(AR.empId)','AR.timeIn', 'AR.timeOut')
        ->andWhere('AR.empId = :id')
        ->setParameter('id', $id)
-       ->andWhere('AR.timeIn < :timeIn')
-       ->setParameter('timeIn', $date)
-       ->andWhere('AR.timeOut = :timeOut')
-       ->setParameter('timeOut', $setNull)
-	   ->getQuery();
-	   return $query->getResult();
+
+       ->andWhere('AR.timeIn >= :timeIn1')
+       ->setParameter('timeIn1', $timeStart)
+       ->andWhere('AR.timeIn <= :timeIn2')
+       ->setParameter('timeIn2', $timeEnd)
+	 ->getQuery();
+       
+	 return $query->getResult();
 	}
-	/*
-       		'ER.id',
-       		'ER.firstName',
-       		'ER.middleName',
-       		'ER.lastName', 
-       		'ER.gender',
-       		'ER.address',
-       		'ER.dob',
-       		'ER.dateEmployement',
-       		'ER.contactDetails',
-       		'ER.emergencyName',
-       		'ER.emergencyRelation',
-       		'ER.emergencyContact',
-       		'ER.status'*/
 	public function searchByDate($id)
       {
-            $startDate = new \DateTime($id.' 00:00:00');
-            $endDate = new \DateTime($id.' 23:59:59');
+            $startDate = new \DateTime($id);
+            $endDate = new \DateTime($id);
             $query = $this->createQueryBuilder('AR')
             ->select(
+                  
+                  'AR.id as exId',
                   'empId.firstName as firstName',
                   'empId.lastName as lastName',
                   'empId.middleName as middleName',
@@ -74,24 +64,27 @@ class AttendanceRecordsRepository extends EntityRepository
                   'empId.emergencyRelation as emergencyRelation',
                   'empId.emergencyContact as emergencyContact',
                   'empId.id as valId',
-                  'AR.timeIn as timeIn', 
+                  'AR.timeIn as timeIn',
+                  'AR.numberOfEdits as numberOfEdits', 
                   'AR.timeOut as timeOut')
             ->join('AR.empId', 'empId')
             ->andWhere('AR.timeIn > :startDate')
-            ->setParameter('startDate', $startDate)
+            ->setParameter('startDate', $startDate->format('Y-m-d 00:00:00'))
             ->andWhere('AR.timeIn < :endDate')
-            ->setParameter('endDate', $endDate)
+            ->setParameter('endDate', $endDate->format('Y-m-d 23:59:59'))
             ->orderBy('AR.timeIn', 'ASC')
             ->getQuery();
 
          return $query->getResult();
       }
+
       public function SearchDateFromTo($id, $id2)
 	{
-		$startDate = new \DateTime($id.' 00:00:00');
-            $endDate = new \DateTime($id2.' 23:59:59');
+		$startDate = new \DateTime($id.'00:00:00');
+            $endDate = new \DateTime($id2.'23:59:59');
             $query = $this->createQueryBuilder('AR')
             ->select(
+                  'AR.id as exId',
                   'empId.firstName as firstName',
                   'empId.lastName as lastName',
                   'empId.middleName as middleName',
@@ -113,13 +106,50 @@ class AttendanceRecordsRepository extends EntityRepository
 	   return $query->getResult();
 	}
 
-	public function findAllRecords()
-	{
-		$query = $this->createQueryBuilder('AR')
-       	->select('empId.firstName as firstName','empId.lastName as lastName','empId.id as valId','AR.timeIn as timeIn', 'AR.timeOut as timeOut')
-       	->join('AR.empId', 'empId')
-	   	->getQuery();
+      public function findAllRecords()
+      {
+            $query = $this->createQueryBuilder('AR')
+            ->select('empId.firstName as firstName','empId.lastName as lastName','empId.id as valId','AR.timeIn as timeIn', 'AR.timeOut as timeOut')
+            ->join('AR.empId', 'empId')
+            ->getQuery();
 
-	   return $query->getResult();
+         return $query->getResult();
+      }
+
+	public function findEditAttendance($exId)
+	{
+      $query = $this->createQueryBuilder('AR')
+       ->select(
+            'IDENTITY(AR.empId)',
+            'AR.timeIn', 
+            'AR.timeOut',
+            'AR.id',
+            'empId.firstName as firstName',
+            'empId.middleName as middleName',
+            'empId.lastName as lastName'
+            )
+
+       ->join('AR.empId', 'empId')
+       ->andWhere('AR.id = :exId')
+       ->setParameter('exId', $exId)
+       
+      ->getQuery();
+
+      return $query->getResult();
 	}
+
+      public function findRecord($id,$tI)
+      {
+      $date1 = new \DateTime($tI);
+      $query = $this->createQueryBuilder('AR')
+       ->select('IDENTITY(AR.empId)','AR.timeIn', 'AR.timeOut')
+       ->andWhere('AR.empId = :id')
+       ->setParameter('id', $id)
+       ->andWhere('AR.timeIn BETWEEN :timeIn AND :timeOut')
+       ->setParameter('timeIn', $date1->format('Y-m-d 00:00:00'))
+       ->setParameter('timeOut', $date1->format('Y-m-d 23:59:59'))
+         ->getQuery();
+
+         return $query->getResult();
+      }
 }

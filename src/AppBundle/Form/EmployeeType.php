@@ -24,14 +24,14 @@ class EmployeeType extends AbstractType
             ->add('lastName', TextType::class, array('label' => 'Last Name'))
             ->add('gender', ChoiceType::class, array(
                     'choices'  =>array(
-                        'placeholder' => 'Choose an option',
+                        null => 'Choose an option',
                         'Female' => 'Female',
                         'Male' => 'Male',),
                     )
                 )
             ->add('status', ChoiceType::class, array(
                     'choices'  =>array(
-                        'placeholder' => 'Choose an option',
+                        null => 'Choose an option',
                         'Single' => 'Single',
                         'Married' => 'Married',
                         'Dicorced' => 'Divorced',
@@ -75,7 +75,7 @@ class EmployeeType extends AbstractType
             ->add('emergencyName', TextType::class, array('label' => 'Name:'))
             ->add('emergencyRelation', ChoiceType::class, array(
                     'choices'  =>array(
-                        'placeholder' => 'Choose an option',
+                        null => 'Choose an option',
                         'Spouse' => 'Spouse',
                         'Sibling' => 'Sibling',
                         'Child' => 'Child',
