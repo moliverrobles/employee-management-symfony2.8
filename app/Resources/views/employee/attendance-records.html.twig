@@ -190,7 +190,7 @@
                 </i></u></small>
               {% else %}
                 <small>tO </small>{{ employeesRecords.timeOut|date('Y-m-d H:i:s') }}
-                {% if employeesRecords.timeOut |date('Y-m-d H:i:s') <  date|date('Y-m-d 17:00:00') %}
+                {% if employeesRecords.timeOut |date('Y-m-d H:i:s') <  employeesRecords.timeOut|date('Y-m-d 17:00:00') %}
                   <small><i><b>(undertime)</b></i></small>{# 
                 {% elseif employeesRecords.timeOut|date('Y-m-d H:i:s') > date|date('Y-m-d 17:15:00') %}
                   <small><i><b>(overtime)</b></i></small> #}
