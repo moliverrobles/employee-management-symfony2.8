@@ -28,7 +28,7 @@ class AttendanceRecordsRepository extends EntityRepository
 
 	   return $query->getResult();
 	}
-	public function findTimeOut($id)
+	/*public function findTimeOut($id)
 	{
         $date = new \DateTime('now');
         $timeStart = $date->format('Y-m-d 00:00:00');
@@ -45,8 +45,9 @@ class AttendanceRecordsRepository extends EntityRepository
        ->setParameter('timeIn2', $timeEnd)
 	 ->getQuery();
        
-	 return $query->getResult();
-	}
+       $result = $query->getResult();
+	 return $result;
+	}*/
 	public function searchByDate($id)
       {
             $startDate = new \DateTime($id);

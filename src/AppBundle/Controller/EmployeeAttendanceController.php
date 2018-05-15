@@ -74,7 +74,6 @@ class EmployeeAttendanceController extends Controller
             $timeOutDate = new \DateTime();
             
             $employeeTimeOut->setTimeOut($timeOutDate);
-
             $em->flush();   
         };
 
