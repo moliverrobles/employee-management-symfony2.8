@@ -185,7 +185,9 @@
             </div>
             <div class="col-sm-3">
               {% if employeesRecords.timeOut is empty %}
-                <small><u><i>~no time-out time~</i></u></small>
+                <small><u><i>
+                  ~no time-out time~
+                </i></u></small>
               {% else %}
                 <small>tO </small>{{ employeesRecords.timeOut|date('Y-m-d H:i:s') }}
                 {% if employeesRecords.timeOut |date('Y-m-d H:i:s') <  date|date('Y-m-d 17:00:00') %}
@@ -303,7 +305,7 @@
     startView: 2,
     showMeridian: 1,
     forceParse: 0,
-    format: 'yyyy-mm-dd hh:ii:ss'
+    format: 'yyyy-mm-dd hh:ii:00'
   });
   $('.select_date').datetimepicker({
     eekStart: 1,
@@ -341,13 +343,30 @@
     }
     var res = tI.split(" ");
 
-    $.ajax({
-      type: "GET",
-      url: "{{ path('admin_insert_attendance', { 'id': 'id','tI': 'tI','tO': 'tO'  }) }}".replace('id', id).replace('tI', tI).replace('tO', tO),
-      success: function(){
-        window.location.href = "{{ path('attendance_records', { 'id': 'tI' }) }}".replace('tI', res[0]);
+    if (tO == 'empty'){
+      var r = confirm("You set time-out as empty, are you sure?");
+      if (r == true) {
+          $.ajax({
+          type: "GET",
+          url: "{{ path('admin_insert_attendance', { 'id': 'id','tI': 'tI','tO': 'tO'  }) }}".replace('id', id).replace('tI', tI).replace('tO', tO),
+          success: function(){
+            window.location.href = "{{ path('attendance_records', { 'id': 'tI' }) }}".replace('tI', res[0]);
+          }
+        });
       }
-    });
+    }else{
+      var r = confirm("save record?");
+      if (r == true) {
+          $.ajax({
+          type: "GET",
+          url: "{{ path('admin_insert_attendance', { 'id': 'id','tI': 'tI','tO': 'tO'  }) }}".replace('id', id).replace('tI', tI).replace('tO', tO),
+          success: function(){
+            window.location.href = "{{ path('attendance_records', { 'id': 'tI' }) }}".replace('tI', res[0]);
+          }
+        });
+      }
+    }
+   
   });
 
   $(".delEntryButton").click(function(){
