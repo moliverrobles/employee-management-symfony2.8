@@ -9,22 +9,27 @@
         </div> #}
         <div class="col-sm-3">
           {{ form_start(form) }}
-            {{ form_widget(form.timeIn,  {'id': 'selectDate','attr':{'class': 'select_date form-control select', 'value':dateFrom}}) }}
+            {{ form_widget(form.timeIn,  {'id':'selectStartDate','attr':{'class': 'datepickerSearch select_date form-control select'}}) }}
         </div>
         <div class="col-sm-1">
             <Center><h5>to</h5></Center>
         </div>
         <div class="col-sm-3">
-            {{ form_widget(form.timeOut,  {'id': 'selectDateTo','attr':{'class': 'select_date form-control select', 'value':dateTo}}) }}
+            {{ form_widget(form.timeOut,  {'id':'selectEndDate','attr':{'class': 'datepickerSearch select_date form-control select'}}) }}
 
           {{ form_end(form) }}
         </div>
         {# <div class="col-sm-1">
           <button class="dateForward pull-left">></button>
         </div> #}
-        <div class="pull-left col-sm-5">
+        <div class="pull-left col-sm-4">
             <button class="btn btn-xs btn-info" id="search">SEARCH</button>
             <a class="btn btn-xs btn-info"href="{{ path('attendance_records', { 'id': 'now'|date("Y-m-d") }) }}">TODAY</a>
+           
+        </div>      
+        <div class="pull-right col-sm-1">
+             <h5><a class="pull-right" data-toggle="modal" data-target="#modalBox"><span class="glyphicon glyphicon-plus-sign"></span>
+              </a></h5>
         </div>        
       </div>
       <div class=" col-sm-12">
@@ -44,11 +49,11 @@
             <b>{{ date|date('D') }}</b>
           </div>
           <div class="col-sm-4">
-            {% if date <=  "now"|date('Y-m-d') %}
+            {# {% if date <=  "now"|date('Y-m-d') %} #}
               <a class="pull-right btn btn-xl btn-primary"href="{{ path('attendance_records', { 'id': next }) }}">
               Next <span class="glyphicon glyphicon-forward"></span>
             </a>
-            {% endif %}
+            {# {% endif %} #}
 
           </div>
         </div>
@@ -76,7 +81,7 @@
             <div class="col-sm-1">
 
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-3">
               <b>Name
             </div>
             <div class="col-sm-3">
@@ -89,7 +94,7 @@
         </div>
         {% if date !='all' %}
           {% for employeesRecords in employeesRecords %}
-          <div class="row">
+          <div class="row recordAttendance">
             <div class="text-right col-sm-1">
 
               <a href="{{ path('show_employee', { 'id': employeesRecords.valId }) }}">
@@ -97,7 +102,7 @@
               </a>
 
             </div>
-            <div class="col-sm-5">
+            <div class="col-sm-3">
               {% if date != 'all'%}
               <a data-toggle="modal" data-target="#modalBox{{ employeesRecords.valId }}">
                 {{ employeesRecords.firstName }} {{ employeesRecords.lastName }}
@@ -173,7 +178,7 @@
           </div>
         {% endif %}
             <div class="datetime col-sm-3">
-              {{ employeesRecords.timeIn |date('Y-m-d H:i:s ') }}
+              <small>tI </small>{{ employeesRecords.timeIn |date('Y-m-d H:i:s ') }}
               {% if employeesRecords.timeIn |date('Y-m-d H:i:s') >  date|date('Y-m-d 08:15:00') %}
                   <small><i><b>(late)</b></i></small>
               {% endif %}
@@ -182,7 +187,7 @@
               {% if employeesRecords.timeOut is empty %}
                 <small><u><i>~no time-out time~</i></u></small>
               {% else %}
-                {{ employeesRecords.timeOut|date('Y-m-d H:i:s') }}
+                <small>tO </small>{{ employeesRecords.timeOut|date('Y-m-d H:i:s') }}
                 {% if employeesRecords.timeOut |date('Y-m-d H:i:s') <  date|date('Y-m-d 17:00:00') %}
                   <small><i><b>(undertime)</b></i></small>{# 
                 {% elseif employeesRecords.timeOut|date('Y-m-d H:i:s') > date|date('Y-m-d 17:15:00') %}
@@ -190,6 +195,20 @@
                 {% else %}
                 {% endif %}
               {% endif %}
+            </div>
+            <div class="col-sm-2">
+              <div class="col-sm-12">
+                <a href="{{ path('edit_employee_attendance', { 'id':employeesRecords.valId,'exId': employeesRecords.exId }) }}"><span class="glyphicon glyphicon-edit"></span></a>
+                <a href="#" class="delEntryButton" id="{{employeesRecords.exId}}"><span class="glyphicon glyphicon-trash"></span></a>
+
+                <small>
+                  {% if employeesRecords.numberOfEdits is defined %}
+                     {{employeesRecords.numberOfEdits}}
+                  {% else %}
+
+                  {% endif %}
+                </small>
+              </div>
             </div>
           </div>
           {% else %}
@@ -228,16 +247,78 @@
     </div>
     <hr/>
   </div>
+
+  <div id="modalBox" class="modal" tabindex="-1" role="dialog">
+    <div style="width:70%;"class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4>Insert Attendance Record for</h4>
+        </div>
+        <div class="modal-body">
+          {{ form_start(formInsert) }}
+            <div class="col-sm-3">
+              <label>Employee</label>
+              <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                {{ form_widget(formInsert.empId,  {'id':'insertEmpId','attr':{'class':'form-control btn btn-info dropdown-toggle'}}) }}
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label>Time In</label><div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                {{ form_widget(formInsert.timeIn,  {'id':'insertTimeIn','attr':{'class':'form-control datepicker',
+                'readonly':true}}) }}
+                
+              </div>
+            </div>
+            <div class="col-sm-4">
+              <label>Time Out</label><div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                {{ form_widget(formInsert.timeOut,  {'id':'insertTimeOut','attr':{'class':'form-control datepicker',
+                'readonly':true}}) }}
+              
+              
+              </div>
+            </div>
+          {{ form_end(formInsert) }}
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="insertRecord" class="insert_record btn btn-success">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <script type="text/javascript">
-  $( function() {
-    $( "#datepicker" ).datepicker();
-  } );
-  </script>
-  <script type="text/javascript">
+  $('.datepicker').datetimepicker({
+    weekStart: 1,
+    todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    showMeridian: 1,
+    forceParse: 0,
+    format: 'yyyy-mm-dd hh:ii:ss'
+  });
+  $('.select_date').datetimepicker({
+    eekStart: 1,
+    todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    minView: 2,
+    forceParse: 0,
+    format: 'yyyy-mm-dd'
+      });
   $('#search').click(function() {
 
-    var id= $('#selectDate').val();
-    var id2= $('#selectDateTo').val();
+    var id= $('#selectStartDate').val();
+    var id2= $('#selectEndDate').val();
 
 
       $.ajax({
@@ -248,9 +329,48 @@
         }
       });
   });
+  $('#insertRecord').click(function() {
+    var id = $('#insertEmpId').val();
+    var tI = $('#insertTimeIn').val();
+    var check = $('#insertTimeOut').val();
+    if (check ==''){
+      var tO = 'empty';
+    }else{
+
+      var tO = $('#insertTimeOut').val();
+    }
+    var res = tI.split(" ");
+
+    $.ajax({
+      type: "GET",
+      url: "{{ path('admin_insert_attendance', { 'id': 'id','tI': 'tI','tO': 'tO'  }) }}".replace('id', id).replace('tI', tI).replace('tO', tO),
+      success: function(){
+        window.location.href = "{{ path('attendance_records', { 'id': 'tI' }) }}".replace('tI', res[0]);
+      }
+    });
+  });
+
+  $(".delEntryButton").click(function(){
+    //Save the link in a variable called element
+    var element = $(this);
+    //takes from id of button taken from for loop and puts it inside del_id
+    var del_id = element.attr("id");
+    //puts del_id value into info
+    var info = del_id;
+    if(confirm("Sure you want to delete entry?"))
+              {
+      $.ajax({
+        type: "GET",
+        url: "{{ path('delete_employee_attendance', { 'id': 'exId' }) }}".replace('exId', info), //
+        success: function(){
+        }
+      });
+      $(this).parents(".recordAttendance").animate({ backgroundColor: "#fbc7c7" }, "slow")
+      .animate({ opacity: "hide" }, "fast");
+     }
+    return false;
+  });
+
   </script>
   
-   {# 
- 
-   #}
 {% endblock %}

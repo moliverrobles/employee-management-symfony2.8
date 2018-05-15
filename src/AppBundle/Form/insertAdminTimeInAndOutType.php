@@ -4,44 +4,35 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Employee;
 use Symfony\Component\Form\AbstractType;
 
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EmployeeAttendanceType extends AbstractType
+class insertAdminTimeInAndOutType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            /*
-            ->add('empId')
-            */
+        $builder/*
+            ->add('timeIn', DateTimeType::class)
+            ->add('timeOut', DateTimeType::class)*/
             ->add('empId', EntityType::class, array(
             // looks for choices from this entity
             'class' => Employee::class,
             'placeholder' => 'Choose Employee',
             'choice_label' => 'fullName',)
             )
-            ->add('timeIn', DateTimeType::class, array(
-                    'widget' => 'single_text',
-                    'data' => new \DateTime()
+            ->add('timeIn', DateType::class, array(
+                'widget' => 'single_text',
+                'html5' => false,
                 ))
-            ->add('timeOut', DateTimeType::class, array(
-                    'widget' => 'single_text',
-                    'data' => new \DateTime()
+            ->add('timeOut', DateType::class, array(
+                'widget' => 'single_text',
+                'html5' => false,
                 ))
-/*
-            ->add('timeInSubmit', SubmitType::class, array('label' => 'timeIn'))
-            ->add('timeOutSubmit', SubmitType::class, array('label' => 'timeOut'))
-            
-
-            */
             ;
     }
 

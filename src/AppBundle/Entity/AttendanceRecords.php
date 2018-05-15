@@ -26,6 +26,7 @@ class AttendanceRecords
      * @ORM\JoinColumn(name="emp_id", referencedColumnName="id")
      */
     private $empId;
+
     /**
      * @var \DateTime
      *
@@ -39,6 +40,29 @@ class AttendanceRecords
      * @ORM\Column(name="time_out", type="datetime", nullable=true)
      */
     private $timeOut;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="time_in_out_edits", type="text", nullable=true)
+     */
+    private $timeInOutEdits;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="number_of_edits", type="string", nullable=true)
+     */
+    private $numberOfEdits;
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="remark", type="string", nullable=true)
+     */
+    private $remark;
+
+
 
 
     /**
@@ -118,5 +142,74 @@ class AttendanceRecords
     public function getTimeOut()
     {
         return $this->timeOut;
+    }
+
+    /**
+     * Set timeInOutEdits
+     *
+     * @param \DateTime $timeInOutEdits
+     * @return AttendanceRecords
+     */
+    public function setTimeInOutEdits($timeInOutEdits)
+    {
+        $this->timeInOutEdits = $timeInOutEdits;
+
+        return $this;
+    }
+
+    /**
+     * Get timeInOutEdits
+     *
+     * @return \DateTime 
+     */
+    public function getTimeInOutEdits()
+    {
+        return $this->timeInOutEdits;
+    }
+
+    /**
+     * Set numberOfEdits
+     *
+     * @param string $numberOfEdits
+     * @return AttendanceRecords
+     */
+    public function setNumberOfEdits($numberOfEdits)
+    {
+        $this->numberOfEdits = $numberOfEdits;
+
+        return $this;
+    }
+
+    /**
+     * Get numberOfEdits
+     *
+     * @return string 
+     */
+    public function getNumberOfEdits()
+    {
+        return $this->numberOfEdits;
+    }
+
+    /**
+     * Set remark
+     *
+     * @param string $remark
+     * @return AttendanceRecords
+     */
+    public function setRemark($remark)
+    {
+        $this->remark = $remark;
+
+        return $this;
+    }
+
+    /**
+     * Get remark
+     *
+     * @return string 
+     */
+    public function getRemark()
+    {
+        return $this->remark;
     }
 }

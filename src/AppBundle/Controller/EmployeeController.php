@@ -170,12 +170,15 @@ class EmployeeController extends Controller
     {
         $attendanceRecord = new AttendanceRecords();
         $form = $this->createForm('AppBundle\Form\SearchAttendanceRecordsType', $attendanceRecord);
+        $formInsert = $this->createForm('AppBundle\Form\insertAdminTimeInAndOutType', $attendanceRecord);
+
 
         $em = $this->getDoctrine()->getManager();
         $employeesRecords = $em->getRepository('AppBundle:AttendanceRecords')->SearchByDate($id);
         return $this->render('employee/attendance-records.html.twig', array(
             'attendanceRecord' =>  $attendanceRecord,
             'form' => $form->createView(),
+            'formInsert' => $formInsert->createView(),
             'employeesRecords' => $employeesRecords,
             'date' => $id,
             'dateTo' => null,
@@ -192,12 +195,14 @@ class EmployeeController extends Controller
     {
         $attendanceRecord = new AttendanceRecords();
         $form = $this->createForm('AppBundle\Form\SearchAttendanceRecordsType', $attendanceRecord);
+        $formInsert = $this->createForm('AppBundle\Form\insertAdminTimeInAndOutType', $attendanceRecord);
 
         $em = $this->getDoctrine()->getManager();
         $employeesRecords = $em->getRepository('AppBundle:AttendanceRecords')->SearchDateFromTo($id, $id2);
         return $this->render('employee/attendance-records.html.twig', array(
             'attendanceRecord' =>  $attendanceRecord,
             'form' => $form->createView(),
+            'formInsert' => $formInsert->createView(),
             'employeesRecords' => $employeesRecords,
             'date' => 'today',
             'dateTo' => $id2,
@@ -205,4 +210,95 @@ class EmployeeController extends Controller
         ));
     }
 
+    /**
+     * 
+     *
+     * @Route("/edit-employee-Attendance/{id}/{exId}", name="edit_employee_attendance")
+     */
+    public function editEmployeeAttendanceAction(Request $request, AttendanceRecords $exId, $id)
+    {
+
+        
+        $em = $this->getDoctrine()->getManager();
+        $employee = $em->getRepository(AttendanceRecords::class)->findBy(array(
+            'id' => $exId, 'empId' =>$id));
+
+        $form = $this->createForm('AppBundle\Form\EditTimeInAndOutType', $exId);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $em->flush();
+        }
+        return $this->render('employee/attendance-records-edit.html.twig', array(
+            'employee' => $employee,
+            'form' => $form->createView(),
+        ));
+    }/*admin_insert_attendance*/
+
+
+
+    /**
+     * @Route("/admin-insert-attendance/{id}/{tI}/{tO}", name="admin_insert_attendance")
+     * @METHOD("GET")
+     */
+    public function adminInsertAttendanceAction($id,$tI,$tO)
+    {
+
+        $timeIn = new \DateTime($tI);
+        if($tO == 'empty'){
+            $timeOut = null;
+        }else{
+            $timeOut = new \DateTime($tO);
+        }
+        /*
+        $timeOut = new \DateTime($tO);*/
+        $em = $this->getDoctrine()->getManager();
+
+        $checkEmployeeEntry = $em->getRepository(AttendanceRecords::class)->findRecord($id,$tI);
+
+        if(!$checkEmployeeEntry){
+            $empId = $em->getReference(AttendanceRecords::class, $id);
+            $insertRecord = new AttendanceRecords();
+            $insertRecord->setEmpId($empId);
+
+            $insertRecord->setTimeIn($timeIn);
+            $insertRecord->setTimeOut($timeOut);
+           
+            $insertRecord->setRemark('Admin');
+
+            $em->persist($insertRecord);
+            $em->flush();
+        }
+
+        $attendanceRecord = new AttendanceRecords();
+        $form = $this->createForm('AppBundle\Form\SearchAttendanceRecordsType', $attendanceRecord);
+        $formInsert = $this->createForm('AppBundle\Form\insertAdminTimeInAndOutType', $attendanceRecord);
+
+        $em = $this->getDoctrine()->getManager();
+        $employeesRecords = $em->getRepository('AppBundle:AttendanceRecords')->searchByDate($tI);
+        return $this->render('employee/attendance-records.html.twig', array(
+            'attendanceRecord' =>  $attendanceRecord,
+            'form' => $form->createView(),
+            'formInsert' => $formInsert->createView(),
+            'employeesRecords' => $employeesRecords,
+            'date' => $tI,
+            'dateTo' => null,
+            'dateFrom' => null,
+        ));
+
+    }
+
+     /**
+     * 
+     *
+     * @Route("/attendance-delete/{id}/", name="delete_employee_attendance")
+     * @Method("GET")
+     */
+    public function deleteAttendanceEntryAction(AttendanceRecords $id)
+    {
+        $em = $this->getDoctrine()->getEntityManager();
+        $em->remove($id);
+        $em->flush();
+    }
 }

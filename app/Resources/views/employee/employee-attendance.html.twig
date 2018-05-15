@@ -135,7 +135,7 @@
 						<div class="row">
 							<div class="col-sm-6">
 								{% for employee in employee %}
-									{% if employee.timeOut != null %}
+									{% if employee.timeOut != null and employee.timeIn|date('Y-m-d') == "now"|date('Y-m-d') %}
 										{% if date(employee.timeIn) > date('-1days') %}
 											{% if date(employee.timeIn) > date('-1days') %} 
 												{{ employee.empId.fullName }}<br/>
@@ -147,7 +147,7 @@
 							</div>
 							<div class="col-sm-6">
 								{% for employee in employee %}
-									{% if employee.timeOut != null %}
+									{% if employee.timeOut != null and employee.timeIn|date('Y-m-d') == "now"|date('Y-m-d')%}
 										{% if date(employee.timeIn) > date('-1days') %} 
 											{% if date(employee.timeIn) > date('-1days') %} 
 												{{ employee.timeOut |date('Y-m-d H:i:s')}}<br/>

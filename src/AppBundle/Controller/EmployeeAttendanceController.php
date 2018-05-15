@@ -66,37 +66,17 @@ class EmployeeAttendanceController extends Controller
     {
         $em = $this->getDoctrine()->getManager();/*
         $employeeTimeOut = $em->getRepository(AttendanceRecords::class)->findTimeOut($id);*/
-
         $employeeTimeOut = $em->getRepository(AttendanceRecords::class)->findOneBy(array(
             'empId' => $id,
-            'timeOut' => null));
-
+            'timeOut' => null
+        ));
         if($employeeTimeOut){
-        $timeOutDate = new \DateTime();
-        $employeeTimeOut->setTimeOut($timeOutDate);
+            $timeOutDate = new \DateTime();
+            
+            $employeeTimeOut->setTimeOut($timeOutDate);
+
+            $em->flush();   
         };
-        $em->flush();
+
     }
 }
-
-
-        
-        /*if ($form->getClickedButton() && 'timeInSubmit' === $form->getClickedButton()->getName()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($attendanceRecord);
-            $em->flush();
-        }
-        if ($form->getClickedButton() && 'timeOutSubmit' === $form->getClickedButton()->getName()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($attendanceRecord);
-            $em->flush();
-        }
-
-        
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($attendanceRecord);
-            $em->flush();
-        }*/
